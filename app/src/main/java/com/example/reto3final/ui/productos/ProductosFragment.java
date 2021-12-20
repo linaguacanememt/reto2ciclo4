@@ -1,6 +1,7 @@
 package com.example.reto3final.ui.productos;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -8,27 +9,45 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.GridView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
-import com.example.reto3final.FormActivity;
+import com.example.reto3final.FormMapsActivity;
 import com.example.reto3final.R;
-import com.example.reto3final.databinding.FragmentProductosBinding;
+import com.example.reto3final.adaptadores.ProductoAdapter;
+import com.example.reto3final.casos_uso.CasoUsoProducto;
+import com.example.reto3final.datos.DBHelper;
+import com.example.reto3final.modelos.Producto;
+
+import java.util.ArrayList;
 
 public class ProductosFragment extends Fragment {
+    private String TABLE_NAME = "PRODUCTOS";
+    private CasoUsoProducto casoUsoProducto;
+    private GridView gridView;
+    private DBHelper dbHelper;
+    private ArrayList<Producto> productos;
 
-    private FragmentProductosBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        binding = FragmentProductosBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        View root = inflater.inflate(R.layout.fragment_productos, container,false);
+        try{
+            casoUsoProducto = new CasoUsoProducto();
+            dbHelper = new DBHelper(getContext());
+            Cursor cursor = dbHelper.getData(TABLE_NAME);
+            productos = casoUsoProducto.llenarListaProductos(cursor);
+            gridView = (GridView) root.findViewById(R.id.gridProductos);
+            ProductoAdapter productoAdapter = new ProductoAdapter(root.getContext(), productos);
+            gridView.setAdapter(productoAdapter);
+        }catch (Exception e){
+            Toast.makeText(getContext(), e.toString(), Toast.LENGTH_LONG).show();
+        }
 
         return root;
     }
@@ -36,8 +55,8 @@ public class ProductosFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,13 +68,26 @@ public class ProductosFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    /*@Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        /*switch (item.getItemId()){
+            case R.id.action_add:
+                Intent intent = new Intent(getContext(), FormActivity.class);
+                intent.putExtra("name","PRODUCTOS");
+                getActivity().startActivity(intent);
+                //Toast.makeText(getContext(), "Hola Productos", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+      }
+     */
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_add:
-                //donde esatmos para donde vamos
-                Intent intent = new Intent(getContext(), FormActivity.class);
-                //pasar a la activ siguiente un dato
+                Intent intent = new Intent(getContext(), FormMapsActivity.class);
                 intent.putExtra("name","PRODUCTOS");
                 getActivity().startActivity(intent);
                 //Toast.makeText(getContext(), "Hola Productos", Toast.LENGTH_SHORT).show();

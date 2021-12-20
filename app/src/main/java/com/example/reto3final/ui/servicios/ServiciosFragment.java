@@ -8,18 +8,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import com.example.reto3final.R;
 
 import com.example.reto3final.FormActivity;
+import com.example.reto3final.R;
 import com.example.reto3final.databinding.FragmentServiciosBinding;
-
 
 public class ServiciosFragment extends Fragment {
 
@@ -27,6 +23,7 @@ public class ServiciosFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
 
         binding = FragmentServiciosBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -39,6 +36,7 @@ public class ServiciosFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +55,7 @@ public class ServiciosFragment extends Fragment {
                 Intent intent = new Intent(getContext(), FormActivity.class);
                 intent.putExtra("name","SERVICIOS");
                 getActivity().startActivity(intent);
-                //Toast.makeText(getContext(), "Hola Productos", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "Hola Servicios", Toast.LENGTH_SHORT).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
